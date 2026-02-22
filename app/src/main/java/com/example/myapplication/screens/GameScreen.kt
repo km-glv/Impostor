@@ -30,12 +30,16 @@ fun GameScreen(
     var isCardRevealed by remember { mutableStateOf(false) }
     var offsetX by remember { mutableStateOf(0f) }
     var showNextButton by remember { mutableStateOf(false) }
+    var showContent by remember { mutableStateOf(true) }
     
     // Resetear el estado cuando cambia el jugador
     LaunchedEffect(currentPlayerIndex) {
+        showContent = false
         isCardRevealed = false
         offsetX = 0f
         showNextButton = false
+        kotlinx.coroutines.delay(100)
+        showContent = true
     }
     
     Column(
@@ -80,7 +84,10 @@ fun GameScreen(
                 .fillMaxWidth(),
             contentAlignment = Alignment.Center
         ) {
-            if (!isCardRevealed) {
+            if (!showContent) {
+                // Pantalla en blanco durante la transición
+                Box(modifier = Modifier.fillMaxSize())
+            } else if (!isCardRevealed) {
                 // Instrucciones
                 Card(
                     modifier = Modifier
@@ -223,11 +230,22 @@ fun GameScreen(
                                 color = MaterialTheme.colorScheme.onErrorContainer
                             )
                         } else {
+                            if (currentPlayer.description.isNotEmpty()) {
+                                Divider()
+                                Text(
+                                    text = currentPlayer.description,
+                                    fontSize = 14.sp,
+                                    textAlign = TextAlign.Center,
+                                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                                    modifier = Modifier.padding(top = 8.dp)
+                                )
+                            }
                             Text(
                                 text = "Memoriza esta palabra y trata de identificar al impostor",
-                                fontSize = 14.sp,
+                                fontSize = 13.sp,
                                 textAlign = TextAlign.Center,
-                                color = MaterialTheme.colorScheme.onPrimaryContainer
+                                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                                modifier = Modifier.padding(top = 8.dp)
                             )
                         }
                     }

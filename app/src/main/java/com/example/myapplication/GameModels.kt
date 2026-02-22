@@ -21,7 +21,8 @@ data class GameConfig(
 data class Player(
     val id: Int,
     val isImpostor: Boolean,
-    val word: String
+    val word: String,
+    val description: String = ""
 )
 
 // Resultado de votación
