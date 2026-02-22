@@ -31,6 +31,7 @@ fun GameScreen(
     var offsetX by remember { mutableStateOf(0f) }
     var showNextButton by remember { mutableStateOf(false) }
     var showContent by remember { mutableStateOf(true) }
+    var isTransitioning by remember { mutableStateOf(false) }
     
     // Resetear el estado cuando cambia el jugador
     LaunchedEffect(currentPlayerIndex) {
@@ -38,6 +39,7 @@ fun GameScreen(
         isCardRevealed = false
         offsetX = 0f
         showNextButton = false
+        isTransitioning = false
         kotlinx.coroutines.delay(300)
         showContent = true
     }
@@ -256,9 +258,16 @@ fun GameScreen(
         }
         
         // Botón siguiente jugador
-        if (showNextButton) {
+        if (showNextButton && !isTransitioning) {
             Button(
-                onClick = onNextPlayer,
+                onClick = {
+                    isTransitioning = true
+                    showContent = false
+                    kotlinx.coroutines.GlobalScope.launch {
+                        kotlinx.coroutines.delay(100)
+                        onNextPlayer()
+                    }
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(56.dp)
