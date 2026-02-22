@@ -174,7 +174,8 @@ fun GameScreen(
                 Card(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 20.dp),
+                        .padding(horizontal = 20.dp)
+                        .alpha(if (showContent) 1f else 0f),
                     colors = CardDefaults.cardColors(
                         containerColor = if (currentPlayer.isImpostor) {
                             MaterialTheme.colorScheme.errorContainer
