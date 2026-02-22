@@ -51,34 +51,54 @@ fun ThemeSelectionScreen(
         
         Spacer(modifier = Modifier.height(20.dp))
         
-        // Tarjeta de Canserbero
+        // Tarjeta de Música
         ThemeCard(
-            theme = MusicTheme.CANSERBERO,
-            icon = "🎤",
-            description = "Hip Hop Venezolano",
-            subtitle = "Palabras sobre rap, lírica y conciencia",
-            isSelected = selectedTheme == MusicTheme.CANSERBERO,
-            onClick = { selectedTheme = MusicTheme.CANSERBERO }
+            theme = MusicTheme.MUSIC,
+            icon = "🎵",
+            description = "Música",
+            subtitle = "Artistas, canciones y géneros musicales",
+            isSelected = selectedTheme == MusicTheme.MUSIC,
+            onClick = { selectedTheme = MusicTheme.MUSIC }
         )
         
-        // Tarjeta Es Épico
+        // Tarjeta de Personajes
         ThemeCard(
-            theme = MusicTheme.EPIC,
+            theme = MusicTheme.CHARACTERS,
+            icon = "🎭",
+            description = "Personajes",
+            subtitle = "Superhéroes, actores, históricos y famosos",
+            isSelected = selectedTheme == MusicTheme.CHARACTERS,
+            onClick = { selectedTheme = MusicTheme.CHARACTERS }
+        )
+        
+        // Tarjeta de Películas
+        ThemeCard(
+            theme = MusicTheme.MOVIES,
+            icon = "🎬",
+            description = "Películas",
+            subtitle = "Acción, terror, comedia y clásicos del cine",
+            isSelected = selectedTheme == MusicTheme.MOVIES,
+            onClick = { selectedTheme = MusicTheme.MOVIES }
+        )
+        
+        // Tarjeta de Videojuegos
+        ThemeCard(
+            theme = MusicTheme.GAMES,
+            icon = "🎮",
+            description = "Videojuegos",
+            subtitle = "Títulos populares de todas las plataformas",
+            isSelected = selectedTheme == MusicTheme.GAMES,
+            onClick = { selectedTheme = MusicTheme.GAMES }
+        )
+        
+        // Tarjeta de Anime
+        ThemeCard(
+            theme = MusicTheme.ANIME,
             icon = "⚔️",
-            description = "Música Épica",
-            subtitle = "Palabras sobre batallas, gloria y heroísmo",
-            isSelected = selectedTheme == MusicTheme.EPIC,
-            onClick = { selectedTheme = MusicTheme.EPIC }
-        )
-        
-        // Tarjeta God of War
-        ThemeCard(
-            theme = MusicTheme.GOD_OF_WAR,
-            icon = "🏛️",
-            description = "God of War",
-            subtitle = "Palabras sobre mitología griega y guerra",
-            isSelected = selectedTheme == MusicTheme.GOD_OF_WAR,
-            onClick = { selectedTheme = MusicTheme.GOD_OF_WAR }
+            description = "Anime",
+            subtitle = "Series y personajes del anime japonés",
+            isSelected = selectedTheme == MusicTheme.ANIME,
+            onClick = { selectedTheme = MusicTheme.ANIME }
         )
         
         Spacer(modifier = Modifier.height(20.dp))

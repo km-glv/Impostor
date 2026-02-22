@@ -1,10 +1,12 @@
 package com.example.myapplication
 
-// Enum para los diferentes temas musicales
+// Enum para los diferentes temas
 enum class MusicTheme(val displayName: String) {
-    CANSERBERO("Canserbero"),
-    EPIC("Es Épico"),
-    GOD_OF_WAR("God of War")
+    MUSIC("Música"),
+    CHARACTERS("Personajes"),
+    MOVIES("Películas"),
+    GAMES("Videojuegos"),
+    ANIME("Anime")
 }
 
 // Configuración del juego
