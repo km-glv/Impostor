@@ -772,13 +772,13 @@ class GameViewModel : ViewModel() {
         val theme = gameConfig.musicTheme ?: MusicTheme.MUSIC
         val words = themeWords[theme] ?: themeWords[MusicTheme.MUSIC]!!
         
-        // Seleccionar 3 palabras aleatorias del tema
-        val selectedWords = words.shuffled().take(3)
-        val selectedWord = selectedWords.random()
+        // Seleccionar una palabra para los inocentes
+        val selectedWord = words.random()
         val description = wordDescriptions[selectedWord] ?: ""
         
-        // Obtener pistas de las 3 palabras para que el impostor tenga 3 opciones
-        val cluesForImpostor = selectedWords.mapNotNull { wordClues[it] }
+        // Seleccionar 3 palabras aleatorias para generar pistas para el impostor
+        val threeRandomWords = words.shuffled().take(3)
+        val cluesForImpostor = threeRandomWords.mapNotNull { wordClues[it] }
         val clueForImpostor = if (cluesForImpostor.isNotEmpty()) {
             cluesForImpostor.random()
         } else {
