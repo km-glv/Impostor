@@ -38,7 +38,7 @@ fun GameScreen(
         isCardRevealed = false
         offsetX = 0f
         showNextButton = false
-        kotlinx.coroutines.delay(100)
+        kotlinx.coroutines.delay(300)
         showContent = true
     }
     

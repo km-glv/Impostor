@@ -771,9 +771,19 @@ class GameViewModel : ViewModel() {
     fun startGame() {
         val theme = gameConfig.musicTheme ?: MusicTheme.MUSIC
         val words = themeWords[theme] ?: themeWords[MusicTheme.MUSIC]!!
-        val selectedWord = words.random()
+        
+        // Seleccionar 3 palabras aleatorias del tema
+        val selectedWords = words.shuffled().take(3)
+        val selectedWord = selectedWords.random()
         val description = wordDescriptions[selectedWord] ?: ""
-        val clueForImpostor = wordClues[selectedWord] ?: themeClues[theme] ?: "Adivina la palabra"
+        
+        // Obtener pistas de las 3 palabras para que el impostor tenga 3 opciones
+        val cluesForImpostor = selectedWords.mapNotNull { wordClues[it] }
+        val clueForImpostor = if (cluesForImpostor.isNotEmpty()) {
+            cluesForImpostor.random()
+        } else {
+            themeClues[theme] ?: "Adivina la palabra"
+        }
         
         // Crear lista de jugadores
         val playerList = mutableListOf<Player>()
