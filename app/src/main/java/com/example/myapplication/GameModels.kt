@@ -6,7 +6,8 @@ enum class MusicTheme(val displayName: String) {
     CHARACTERS("Personajes"),
     MOVIES("Películas"),
     GAMES("Videojuegos"),
-    ANIME("Anime")
+    ANIME("Anime"),
+    CHILE("Chile")
 }
 
 // Configuración del juego

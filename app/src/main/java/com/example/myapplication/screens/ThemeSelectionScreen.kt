@@ -101,6 +101,16 @@ fun ThemeSelectionScreen(
             onClick = { selectedTheme = MusicTheme.ANIME }
         )
         
+        // Tarjeta de Chile
+        ThemeCard(
+            theme = MusicTheme.CHILE,
+            icon = "🇨🇱",
+            description = "Chile",
+            subtitle = "Comida, lugares, cultura y tradiciones chilenas",
+            isSelected = selectedTheme == MusicTheme.CHILE,
+            onClick = { selectedTheme = MusicTheme.CHILE }
+        )
+        
         Spacer(modifier = Modifier.height(20.dp))
         
         Button(
