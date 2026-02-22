@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.myapplication.Player
+import kotlinx.coroutines.launch
 import kotlin.math.abs
 import kotlin.math.roundToInt
 
@@ -32,6 +33,7 @@ fun GameScreen(
     var showNextButton by remember { mutableStateOf(false) }
     var showContent by remember { mutableStateOf(true) }
     var isTransitioning by remember { mutableStateOf(false) }
+    val coroutineScope = rememberCoroutineScope()
     
     // Resetear el estado cuando cambia el jugador
     LaunchedEffect(currentPlayerIndex) {
@@ -263,7 +265,7 @@ fun GameScreen(
                 onClick = {
                     isTransitioning = true
                     showContent = false
-                    kotlinx.coroutines.GlobalScope.launch {
+                    coroutineScope.launch {
                         kotlinx.coroutines.delay(100)
                         onNextPlayer()
                     }
