@@ -776,14 +776,8 @@ class GameViewModel : ViewModel() {
         val selectedWord = words.random()
         val description = wordDescriptions[selectedWord] ?: ""
         
-        // Seleccionar 3 palabras aleatorias para generar pistas para el impostor
-        val threeRandomWords = words.shuffled().take(3)
-        val cluesForImpostor = threeRandomWords.mapNotNull { wordClues[it] }
-        val clueForImpostor = if (cluesForImpostor.isNotEmpty()) {
-            cluesForImpostor.random()
-        } else {
-            themeClues[theme] ?: "Adivina la palabra"
-        }
+        // La pista del impostor siempre está relacionada con la palabra correcta
+        val clueForImpostor = wordClues[selectedWord] ?: themeClues[theme] ?: "Adivina la palabra"
         
         // Crear lista de jugadores
         val playerList = mutableListOf<Player>()
