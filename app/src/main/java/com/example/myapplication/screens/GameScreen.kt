@@ -92,7 +92,8 @@ fun GameScreen(
                 Card(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 20.dp),
+                        .padding(horizontal = 20.dp)
+                        .alpha(if (showContent) 1f else 0f),
                     colors = CardDefaults.cardColors(
                         containerColor = MaterialTheme.colorScheme.secondaryContainer
                     )
@@ -149,7 +150,7 @@ fun GameScreen(
                                 }
                             )
                         }
-                        .alpha(1f - abs(offsetX) / 1000f),
+                        .alpha(if (showContent) (1f - abs(offsetX) / 1000f) else 0f),
                     colors = CardDefaults.cardColors(
                         containerColor = MaterialTheme.colorScheme.primaryContainer
                     ),
