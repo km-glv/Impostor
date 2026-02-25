@@ -90,9 +90,18 @@ class AudioMonitor(private val context: Context) {
     fun stopMonitoring() {
         isMonitoring = false
         monitoringJob?.cancel()
-        audioRecord?.stop()
-        audioRecord?.release()
-        audioRecord = null
+        
+        try {
+            // Solo detener si el AudioRecord está en un estado válido
+            if (audioRecord?.state == AudioRecord.STATE_INITIALIZED) {
+                audioRecord?.stop()
+            }
+        } catch (e: Exception) {
+            // Ignorar errores al detener
+        } finally {
+            audioRecord?.release()
+            audioRecord = null
+        }
     }
     
     private fun playShush() {
