@@ -9,6 +9,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.myapplication.screens.*
 import com.example.myapplication.ui.theme.MyApplicationTheme
@@ -17,6 +20,14 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        
+        // Ocultar barras del sistema y notificaciones
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+        val controller = WindowInsetsControllerCompat(window, window.decorView)
+        controller.hide(WindowInsetsCompat.Type.systemBars())
+        controller.hide(WindowInsetsCompat.Type.statusBars())
+        controller.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+        
         setContent {
             MyApplicationTheme {
                 Surface(
@@ -33,8 +44,16 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun ImpostorGame() {
     val viewModel: GameViewModel = viewModel()
+    val context = androidx.compose.ui.platform.LocalContext.current
+    val prefs = remember { PlayerPreferences(context) }
     var currentScreen by remember { mutableStateOf(Screen.CONFIG) }
     var showResults by remember { mutableStateOf(false) }
+    
+    // Cargar configuración guardada al inicio
+    LaunchedEffect(Unit) {
+        val savedConfig = prefs.loadConfig()
+        viewModel.updateConfig(savedConfig)
+    }
     
     when {
         showResults -> {
@@ -60,7 +79,11 @@ fun ImpostorGame() {
                 currentPlayer = viewModel.players[viewModel.currentPlayerIndex],
                 currentPlayerIndex = viewModel.currentPlayerIndex,
                 totalPlayers = viewModel.players.size,
-                onNextPlayer = { viewModel.nextPlayer() }
+                onNextPlayer = { viewModel.nextPlayer() },
+                onExitGame = {
+                    viewModel.exitGame()
+                    currentScreen = Screen.CONFIG
+                }
             )
         }
         else -> {
@@ -68,7 +91,10 @@ fun ImpostorGame() {
                 Screen.CONFIG -> {
                     ConfigScreen(
                         currentConfig = viewModel.gameConfig,
-                        onConfigUpdate = { config -> viewModel.updateConfig(config) },
+                        onConfigUpdate = { config -> 
+                            viewModel.updateConfig(config)
+                            prefs.saveConfig(config)
+                        },
                         onNext = { currentScreen = Screen.THEME }
                     )
                 }
@@ -76,11 +102,12 @@ fun ImpostorGame() {
                     ThemeSelectionScreen(
                         currentConfig = viewModel.gameConfig,
                         onThemeSelected = { theme ->
-                            viewModel.updateConfig(
-                                viewModel.gameConfig.copy(musicTheme = theme)
-                            )
+                            val updatedConfig = viewModel.gameConfig.copy(musicTheme = theme)
+                            viewModel.updateConfig(updatedConfig)
+                            prefs.saveConfig(updatedConfig)
                             viewModel.startGame()
-                        }
+                        },
+                        onBack = { currentScreen = Screen.CONFIG }
                     )
                 }
             }

@@ -26,6 +26,7 @@ fun GameScreen(
     currentPlayerIndex: Int,
     totalPlayers: Int,
     onNextPlayer: () -> Unit,
+    onExitGame: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     var isCardRevealed by remember { mutableStateOf(false) }
@@ -33,6 +34,7 @@ fun GameScreen(
     var showNextButton by remember { mutableStateOf(false) }
     var showContent by remember { mutableStateOf(true) }
     var isTransitioning by remember { mutableStateOf(false) }
+    var showExitDialog by remember { mutableStateOf(false) }
     val coroutineScope = rememberCoroutineScope()
     
     // Resetear el estado cuando cambia el jugador
@@ -44,6 +46,33 @@ fun GameScreen(
         isTransitioning = false
         kotlinx.coroutines.delay(300)
         showContent = true
+    }
+    
+    // Diálogo de confirmación de salida
+    if (showExitDialog) {
+        AlertDialog(
+            onDismissRequest = { showExitDialog = false },
+            title = { Text("¿Salir del juego?") },
+            text = { Text("Se perderá el progreso actual y volverás al menú principal.") },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        showExitDialog = false
+                        onExitGame()
+                    },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.error
+                    )
+                ) {
+                    Text("Salir")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showExitDialog = false }) {
+                    Text("Cancelar")
+                }
+            }
+        )
     }
     
     Column(
@@ -58,6 +87,18 @@ fun GameScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
+            // Botón salir
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.End
+            ) {
+                TextButton(
+                    onClick = { showExitDialog = true }
+                ) {
+                    Text("✕ Salir", color = MaterialTheme.colorScheme.error)
+                }
+            }
+            
             Text(
                 text = "JUGADOR ${currentPlayer.id}",
                 fontSize = 32.sp,

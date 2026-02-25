@@ -1112,7 +1112,8 @@ class GameViewModel : ViewModel() {
             playerList.add(Player(i + 1, isImpostor, word, desc))
         }
         
-        players = playerList
+        // Mezclar orden de jugadores para que comience uno al azar
+        players = playerList.shuffled()
         currentPlayerIndex = 0
         isGameStarted = true
         showVotingScreen = false
@@ -1142,6 +1143,14 @@ class GameViewModel : ViewModel() {
     
     fun resetGame() {
         gameConfig = GameConfig()
+        players = emptyList()
+        currentPlayerIndex = 0
+        isGameStarted = false
+        showVotingScreen = false
+        votes = emptyMap()
+    }
+    
+    fun exitGame() {
         players = emptyList()
         currentPlayerIndex = 0
         isGameStarted = false

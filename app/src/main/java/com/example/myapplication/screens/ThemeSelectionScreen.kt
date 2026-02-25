@@ -20,43 +20,54 @@ import com.example.myapplication.MusicTheme
 fun ThemeSelectionScreen(
     currentConfig: GameConfig,
     onThemeSelected: (MusicTheme) -> Unit,
+    onBack: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    var selectedTheme by remember { mutableStateOf<MusicTheme?>(null) }
+    var selectedTheme by remember { mutableStateOf(currentConfig.musicTheme) }
     
     Column(
         modifier = modifier
             .fillMaxSize()
-            .verticalScroll(rememberScrollState())
             .padding(24.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(20.dp)
+        verticalArrangement = Arrangement.SpaceBetween
     ) {
-        Spacer(modifier = Modifier.height(40.dp))
+        // Header
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Spacer(modifier = Modifier.height(20.dp))
+            
+            Text(
+                text = "🎵 Selecciona el Tema 🎵",
+                fontSize = 28.sp,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.primary,
+                textAlign = TextAlign.Center
+            )
+            
+            Text(
+                text = "El tema define las palabras del juego",
+                fontSize = 14.sp,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(top = 8.dp)
+            )
+        }
         
-        Text(
-            text = "🎵 Selecciona el Tema 🎵",
-            fontSize = 32.sp,
-            fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.primary,
-            textAlign = TextAlign.Center
-        )
-        
-        Text(
-            text = "El tema define las palabras del juego",
-            fontSize = 16.sp,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            textAlign = TextAlign.Center
-        )
-        
-        Spacer(modifier = Modifier.height(20.dp))
-        
-        // Tarjeta de Música
+        // Temas en grid scrolleable
+        Column(
+            modifier = Modifier
+                .weight(1f)
+                .verticalScroll(rememberScrollState())
+                .padding(vertical = 16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
         ThemeCard(
             theme = MusicTheme.MUSIC,
             icon = "🎵",
             description = "Música",
-            subtitle = "Artistas, canciones y géneros musicales",
+            subtitle = "Artistas, canciones y géneros",
             isSelected = selectedTheme == MusicTheme.MUSIC,
             onClick = { selectedTheme = MusicTheme.MUSIC }
         )
@@ -66,7 +77,7 @@ fun ThemeSelectionScreen(
             theme = MusicTheme.CHARACTERS,
             icon = "🎭",
             description = "Personajes",
-            subtitle = "Superhéroes, actores, históricos y famosos",
+            subtitle = "Superhéroes, actores, históricos",
             isSelected = selectedTheme == MusicTheme.CHARACTERS,
             onClick = { selectedTheme = MusicTheme.CHARACTERS }
         )
@@ -76,7 +87,7 @@ fun ThemeSelectionScreen(
             theme = MusicTheme.MOVIES,
             icon = "🎬",
             description = "Películas",
-            subtitle = "Acción, terror, comedia y clásicos del cine",
+            subtitle = "Acción, terror, comedia y cine",
             isSelected = selectedTheme == MusicTheme.MOVIES,
             onClick = { selectedTheme = MusicTheme.MOVIES }
         )
@@ -86,7 +97,7 @@ fun ThemeSelectionScreen(
             theme = MusicTheme.GAMES,
             icon = "🎮",
             description = "Videojuegos",
-            subtitle = "Títulos populares de todas las plataformas",
+            subtitle = "Títulos populares",
             isSelected = selectedTheme == MusicTheme.GAMES,
             onClick = { selectedTheme = MusicTheme.GAMES }
         )
@@ -96,7 +107,7 @@ fun ThemeSelectionScreen(
             theme = MusicTheme.ANIME,
             icon = "⚔️",
             description = "Anime",
-            subtitle = "Series y personajes del anime japonés",
+            subtitle = "Series y personajes japoneses",
             isSelected = selectedTheme == MusicTheme.ANIME,
             onClick = { selectedTheme = MusicTheme.ANIME }
         )
@@ -106,26 +117,38 @@ fun ThemeSelectionScreen(
             theme = MusicTheme.CHILE,
             icon = "🇨🇱",
             description = "Chile",
-            subtitle = "Comida, lugares, cultura y tradiciones chilenas",
+            subtitle = "Cultura y tradiciones chilenas",
             isSelected = selectedTheme == MusicTheme.CHILE,
             onClick = { selectedTheme = MusicTheme.CHILE }
         )
-        
-        Spacer(modifier = Modifier.height(20.dp))
-        
-        Button(
-            onClick = {
-                selectedTheme?.let { onThemeSelected(it) }
-            },
-            enabled = selectedTheme != null,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(56.dp)
-        ) {
-            Text("Comenzar Juego 🎮", fontSize = 18.sp)
         }
         
-        Spacer(modifier = Modifier.height(20.dp))
+        // Botones siempre visibles
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            Button(
+                onClick = {
+                    selectedTheme?.let { onThemeSelected(it) }
+                },
+                enabled = selectedTheme != null,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(56.dp)
+            ) {
+                Text("Comenzar Juego 🎮", fontSize = 18.sp)
+            }
+            
+            OutlinedButton(
+                onClick = onBack,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(48.dp)
+            ) {
+                Text("← Volver a Configuración", fontSize = 16.sp)
+            }
+        }
     }
 }
 
@@ -142,7 +165,7 @@ private fun ThemeCard(
         onClick = onClick,
         modifier = Modifier
             .fillMaxWidth()
-            .height(140.dp),
+            .height(110.dp),
         colors = CardDefaults.cardColors(
             containerColor = if (isSelected) {
                 MaterialTheme.colorScheme.primaryContainer
