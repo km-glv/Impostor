@@ -27,6 +27,7 @@ fun GameScreen(
     totalPlayers: Int,
     onNextPlayer: () -> Unit,
     onExitGame: () -> Unit,
+    audioMonitor: AudioMonitor? = null,
     modifier: Modifier = Modifier
 ) {
     var isCardRevealed by remember { mutableStateOf(false) }
@@ -44,8 +45,18 @@ fun GameScreen(
         offsetY = 0f
         showNextButton = false
         isTransitioning = false
+        audioMonitor?.stopMonitoring()
         kotlinx.coroutines.delay(300)
         showContent = true
+    }
+    
+    // Iniciar monitoreo cuando se revela la tarjeta
+    LaunchedEffect(isCardRevealed) {
+        if (isCardRevealed) {
+            audioMonitor?.startMonitoring()
+        } else {
+            audioMonitor?.stopMonitoring()
+        }
     }
     
     // Diálogo de confirmación de salida

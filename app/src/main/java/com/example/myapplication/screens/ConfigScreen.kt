@@ -22,6 +22,7 @@ fun ConfigScreen(
     var totalPlayers by remember { mutableStateOf(currentConfig.totalPlayers) }
     var totalImpostors by remember { mutableStateOf(currentConfig.totalImpostors) }
     var giveClue by remember { mutableStateOf(currentConfig.giveClueToImpostor) }
+    var enableAudioMonitoring by remember { mutableStateOf(currentConfig.enableAudioMonitoring) }
     var showError by remember { mutableStateOf(false) }
 
     Column(
@@ -144,6 +145,31 @@ fun ConfigScreen(
                         modifier = Modifier.padding(start = 8.dp)
                     )
                 }
+                
+                Divider()
+                
+                // Monitoreo de audio
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text(
+                            text = "Detector de ruido",
+                            fontSize = 16.sp
+                        )
+                        Text(
+                            text = "El teléfono dirá 'SHHH' si detecta ruido alto",
+                            fontSize = 12.sp,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                    Switch(
+                        checked = enableAudioMonitoring,
+                        onCheckedChange = { enableAudioMonitoring = it }
+                    )
+                }
             }
         }
         
@@ -171,7 +197,8 @@ fun ConfigScreen(
                         GameConfig(
                             totalPlayers = totalPlayers,
                             totalImpostors = totalImpostors,
-                            giveClueToImpostor = giveClue
+                            giveClueToImpostor = giveClue,
+                            enableAudioMonitoring = enableAudioMonitoring
                         )
                     )
                     onNext()

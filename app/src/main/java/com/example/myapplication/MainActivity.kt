@@ -46,6 +46,7 @@ fun ImpostorGame() {
     val viewModel: GameViewModel = viewModel()
     val context = androidx.compose.ui.platform.LocalContext.current
     val prefs = remember { PlayerPreferences(context) }
+    val audioMonitor = remember { AudioMonitor(context) }
     var currentScreen by remember { mutableStateOf(Screen.CONFIG) }
     var showResults by remember { mutableStateOf(false) }
     
@@ -53,6 +54,13 @@ fun ImpostorGame() {
     LaunchedEffect(Unit) {
         val savedConfig = prefs.loadConfig()
         viewModel.updateConfig(savedConfig)
+    }
+    
+    // Limpiar recursos al salir
+    DisposableEffect(Unit) {
+        onDispose {
+            audioMonitor.cleanup()
+        }
     }
     
     when {
@@ -87,9 +95,11 @@ fun ImpostorGame() {
                 totalPlayers = viewModel.players.size,
                 onNextPlayer = { viewModel.nextPlayer() },
                 onExitGame = {
+                    audioMonitor.stopMonitoring()
                     viewModel.exitGame()
                     currentScreen = Screen.CONFIG
-                }
+                },
+                audioMonitor = if (viewModel.gameConfig.enableAudioMonitoring) audioMonitor else null
             )
         }
         else -> {
