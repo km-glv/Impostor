@@ -67,6 +67,12 @@ fun ImpostorGame() {
                 }
             )
         }
+        viewModel.showStartingPlayerScreen -> {
+            StartingPlayerScreen(
+                startingPlayerId = viewModel.startingPlayerId,
+                onContinue = { viewModel.startVoting() }
+            )
+        }
         viewModel.showVotingScreen -> {
             VotingScreen(
                 players = viewModel.players,

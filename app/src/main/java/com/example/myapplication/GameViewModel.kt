@@ -21,6 +21,12 @@ class GameViewModel : ViewModel() {
     var showVotingScreen by mutableStateOf(false)
         private set
     
+    var showStartingPlayerScreen by mutableStateOf(false)
+        private set
+    
+    var startingPlayerId by mutableStateOf(0)
+        private set
+    
     var votes by mutableStateOf<Map<Int, Int>>(emptyMap())
         private set
     
@@ -583,7 +589,6 @@ class GameViewModel : ViewModel() {
         "Los Prisioneros" to "Banda de rock chileno ochentero",
         "La Ley" to "Banda de rock chileno de los 90",
         "Los Bunkers" to "Banda de rock chileno actual",
-        "Noche" to "Banda chilena de pop rock",
         "Chancho en Piedra" to "Banda chilena de funk rock",
         "Mon Laferte" to "Cantante chilena internacional",
         "Gepe" to "Cantautor chileno indie",
@@ -1112,11 +1117,13 @@ class GameViewModel : ViewModel() {
             playerList.add(Player(i + 1, isImpostor, word, desc))
         }
         
-        // Mezclar orden de jugadores para que comience uno al azar
-        players = playerList.shuffled()
+        // Mantener orden 1 a N, pero seleccionar jugador inicial al azar
+        players = playerList
+        startingPlayerId = players.random().id
         currentPlayerIndex = 0
         isGameStarted = true
         showVotingScreen = false
+        showStartingPlayerScreen = false
         votes = emptyMap()
     }
     
@@ -1124,9 +1131,14 @@ class GameViewModel : ViewModel() {
         if (currentPlayerIndex < players.size - 1) {
             currentPlayerIndex++
         } else {
-            // Todos vieron su palabra, iniciar votación
-            showVotingScreen = true
+            // Todos vieron su palabra, mostrar jugador inicial
+            showStartingPlayerScreen = true
         }
+    }
+    
+    fun startVoting() {
+        showStartingPlayerScreen = false
+        showVotingScreen = true
     }
     
     fun vote(playerId: Int) {
@@ -1147,6 +1159,8 @@ class GameViewModel : ViewModel() {
         currentPlayerIndex = 0
         isGameStarted = false
         showVotingScreen = false
+        showStartingPlayerScreen = false
+        startingPlayerId = 0
         votes = emptyMap()
     }
     
@@ -1155,6 +1169,8 @@ class GameViewModel : ViewModel() {
         currentPlayerIndex = 0
         isGameStarted = false
         showVotingScreen = false
+        showStartingPlayerScreen = false
+        startingPlayerId = 0
         votes = emptyMap()
     }
 }

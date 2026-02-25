@@ -1,7 +1,7 @@
 package com.example.myapplication.screens
 
 import androidx.compose.animation.core.*
-import androidx.compose.foundation.gestures.detectHorizontalDragGestures
+import androidx.compose.foundation.gestures.detectVerticalDragGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -30,7 +30,7 @@ fun GameScreen(
     modifier: Modifier = Modifier
 ) {
     var isCardRevealed by remember { mutableStateOf(false) }
-    var offsetX by remember { mutableStateOf(0f) }
+    var offsetY by remember { mutableStateOf(0f) }
     var showNextButton by remember { mutableStateOf(false) }
     var showContent by remember { mutableStateOf(true) }
     var isTransitioning by remember { mutableStateOf(false) }
@@ -41,7 +41,7 @@ fun GameScreen(
     LaunchedEffect(currentPlayerIndex) {
         showContent = false
         isCardRevealed = false
-        offsetX = 0f
+        offsetY = 0f
         showNextButton = false
         isTransitioning = false
         kotlinx.coroutines.delay(300)
@@ -161,7 +161,7 @@ fun GameScreen(
                             textAlign = TextAlign.Center
                         )
                         Text(
-                            text = "Desliza la tarjeta hacia la izquierda para ver tu palabra",
+                            text = "Desliza la tarjeta hacia arriba para ver tu palabra",
                             fontSize = 14.sp,
                             textAlign = TextAlign.Center,
                             color = MaterialTheme.colorScheme.onSecondaryContainer
@@ -174,28 +174,28 @@ fun GameScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 20.dp)
-                        .offset { IntOffset(offsetX.roundToInt(), 0) }
+                        .offset { IntOffset(0, offsetY.roundToInt()) }
                         .pointerInput(Unit) {
-                            detectHorizontalDragGestures(
+                            detectVerticalDragGestures(
                                 onDragEnd = {
-                                    if (offsetX < -300f) {
-                                        // Deslizó suficiente, revelar
+                                    if (offsetY < -300f) {
+                                        // Deslizó suficiente hacia arriba, revelar
                                         isCardRevealed = true
                                         showNextButton = true
                                     } else {
                                         // Volver a posición original
-                                        offsetX = 0f
+                                        offsetY = 0f
                                     }
                                 },
-                                onHorizontalDrag = { _, dragAmount ->
-                                    val newOffset = offsetX + dragAmount
+                                onVerticalDrag = { _, dragAmount ->
+                                    val newOffset = offsetY + dragAmount
                                     if (newOffset < 0) {
-                                        offsetX = newOffset
+                                        offsetY = newOffset
                                     }
                                 }
                             )
                         }
-                        .alpha(if (showContent) (1f - abs(offsetX) / 1000f) else 0f),
+                        .alpha(if (showContent) (1f - abs(offsetY) / 1000f) else 0f),
                     colors = CardDefaults.cardColors(
                         containerColor = MaterialTheme.colorScheme.primaryContainer
                     ),
@@ -208,7 +208,7 @@ fun GameScreen(
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
-                            text = "← Desliza",
+                            text = "↑ Desliza",
                             fontSize = 28.sp,
                             fontWeight = FontWeight.Bold,
                             color = MaterialTheme.colorScheme.onPrimaryContainer
