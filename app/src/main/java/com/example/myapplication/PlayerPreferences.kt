@@ -12,6 +12,7 @@ class PlayerPreferences(context: Context) {
         private const val KEY_GIVE_CLUE = "give_clue"
         private const val KEY_MUSIC_THEME = "music_theme"
         private const val KEY_AUDIO_MONITORING = "audio_monitoring"
+        private const val KEY_SEND_TO_WATCH = "send_to_watch"
     }
     
     fun saveConfig(config: GameConfig) {
@@ -20,6 +21,7 @@ class PlayerPreferences(context: Context) {
             putInt(KEY_TOTAL_IMPOSTORS, config.totalImpostors)
             putBoolean(KEY_GIVE_CLUE, config.giveClueToImpostor)
             putBoolean(KEY_AUDIO_MONITORING, config.enableAudioMonitoring)
+            putBoolean(KEY_SEND_TO_WATCH, config.sendInfoToWatch)
             config.musicTheme?.let { putString(KEY_MUSIC_THEME, it.name) }
             apply()
         }
@@ -31,6 +33,7 @@ class PlayerPreferences(context: Context) {
             totalImpostors = prefs.getInt(KEY_TOTAL_IMPOSTORS, 1),
             giveClueToImpostor = prefs.getBoolean(KEY_GIVE_CLUE, true),
             enableAudioMonitoring = prefs.getBoolean(KEY_AUDIO_MONITORING, false),
+            sendInfoToWatch = prefs.getBoolean(KEY_SEND_TO_WATCH, false),
             musicTheme = prefs.getString(KEY_MUSIC_THEME, null)?.let { 
                 try {
                     MusicTheme.valueOf(it)

@@ -23,6 +23,7 @@ fun ConfigScreen(
     var totalImpostors by remember { mutableStateOf(currentConfig.totalImpostors) }
     var giveClue by remember { mutableStateOf(currentConfig.giveClueToImpostor) }
     var enableAudioMonitoring by remember { mutableStateOf(currentConfig.enableAudioMonitoring) }
+    var sendInfoToWatch by remember { mutableStateOf(currentConfig.sendInfoToWatch) }
     var showError by remember { mutableStateOf(false) }
 
     Column(
@@ -170,6 +171,31 @@ fun ConfigScreen(
                         onCheckedChange = { enableAudioMonitoring = it }
                     )
                 }
+                
+                Divider()
+                
+                // Enviar info al reloj
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text(
+                            text = "Enviar info al reloj ⌚",
+                            fontSize = 16.sp
+                        )
+                        Text(
+                            text = "Notificación con palabra e impostores",
+                            fontSize = 12.sp,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                    Switch(
+                        checked = sendInfoToWatch,
+                        onCheckedChange = { sendInfoToWatch = it }
+                    )
+                }
             }
         }
         
@@ -198,7 +224,8 @@ fun ConfigScreen(
                             totalPlayers = totalPlayers,
                             totalImpostors = totalImpostors,
                             giveClueToImpostor = giveClue,
-                            enableAudioMonitoring = enableAudioMonitoring
+                            enableAudioMonitoring = enableAudioMonitoring,
+                            sendInfoToWatch = sendInfoToWatch
                         )
                     )
                     onNext()

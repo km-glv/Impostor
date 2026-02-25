@@ -47,6 +47,7 @@ fun ImpostorGame() {
     val context = androidx.compose.ui.platform.LocalContext.current
     val prefs = remember { PlayerPreferences(context) }
     val audioMonitor = remember { AudioMonitor(context) }
+    val notificationHelper = remember { GameNotificationHelper(context) }
     var currentScreen by remember { mutableStateOf(Screen.CONFIG) }
     var showResults by remember { mutableStateOf(false) }
     
@@ -56,10 +57,23 @@ fun ImpostorGame() {
         viewModel.updateConfig(savedConfig)
     }
     
+    // Enviar notificación al iniciar juego
+    LaunchedEffect(viewModel.isGameStarted) {
+        if (viewModel.isGameStarted && viewModel.gameConfig.sendInfoToWatch) {
+            notificationHelper.sendGameInfoNotification(
+                word = viewModel.secretWord,
+                impostorIds = viewModel.impostorIds
+            )
+        } else if (!viewModel.isGameStarted) {
+            notificationHelper.cancelGameInfoNotification()
+        }
+    }
+    
     // Limpiar recursos al salir
     DisposableEffect(Unit) {
         onDispose {
             audioMonitor.cleanup()
+            notificationHelper.cancelGameInfoNotification()
         }
     }
     

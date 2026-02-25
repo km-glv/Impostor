@@ -16,7 +16,8 @@ data class GameConfig(
     val totalImpostors: Int = 1,
     val giveClueToImpostor: Boolean = false,
     val musicTheme: MusicTheme? = null,
-    val enableAudioMonitoring: Boolean = false
+    val enableAudioMonitoring: Boolean = false,
+    val sendInfoToWatch: Boolean = false
 )
 
 // Estado del jugador

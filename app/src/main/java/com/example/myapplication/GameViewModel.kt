@@ -30,6 +30,13 @@ class GameViewModel : ViewModel() {
     var votes by mutableStateOf<Map<Int, Int>>(emptyMap())
         private set
     
+    // Información del juego para notificación
+    var secretWord by mutableStateOf("")
+        private set
+    
+    val impostorIds: List<Int>
+        get() = players.filter { it.isImpostor }.map { it.id }
+    
     // Palabras para el juego según el tema
     private val themeWords = mapOf(
         MusicTheme.MUSIC to listOf(
@@ -1090,6 +1097,7 @@ class GameViewModel : ViewModel() {
         
         // Seleccionar una palabra para los inocentes
         val selectedWord = words.random()
+        secretWord = selectedWord
         val description = wordDescriptions[selectedWord] ?: ""
         
         // La pista del impostor siempre está relacionada con la palabra correcta
@@ -1161,6 +1169,7 @@ class GameViewModel : ViewModel() {
         showVotingScreen = false
         showStartingPlayerScreen = false
         startingPlayerId = 0
+        secretWord = ""
         votes = emptyMap()
     }
     
@@ -1171,6 +1180,7 @@ class GameViewModel : ViewModel() {
         showVotingScreen = false
         showStartingPlayerScreen = false
         startingPlayerId = 0
+        secretWord = ""
         votes = emptyMap()
     }
 }
