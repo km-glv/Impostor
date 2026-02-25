@@ -15,6 +15,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.myapplication.AudioMonitor
 import com.example.myapplication.Player
 import kotlinx.coroutines.launch
 import kotlin.math.abs
